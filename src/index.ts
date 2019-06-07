@@ -106,7 +106,7 @@ function createTrack(this: Phaser.Scene) {
 						// graphics.fillPointShape(point, 5)
 					}
 
-					let t = curve.getUtoTmapping(1 / 10, undefined)
+					let t = curve.getUtoTmapping(0.7, undefined)
 					let p = curve.getPoint(t)
 					console.log(t, p)
 
@@ -147,7 +147,7 @@ function createTrack(this: Phaser.Scene) {
 					// console.log(curve.getPoints().length)
 
 					// graphics.lineStyle(50, 0xbbbbbb)
-					// curve.draw(graphics, 64)
+					curve.draw(graphics, 64)
 				}
 			}
 		},

@@ -202,25 +202,33 @@ function update(this: Phaser.Scene) {
 
 	visionLineGraphics.clear()
 
+	let visionSize = 500
 	let middleX = Math.cos(angle(car.angle, 90)) * (car.displayHeight / 2) + point1.x
 	let middleY = Math.sin(angle(car.angle, 90)) * (car.displayHeight / 2) + point1.y
 
-	visionLine1.setTo(point1.x, point1.y, Math.cos(angle(car.angle, -90)) * 300 + point1.x, Math.sin(angle(car.angle, -90)) * 300 + point1.y)
-	visionLine2.setTo(point1.x, point1.y, Math.cos(angle(car.angle, -45)) * 300 + point1.x, Math.sin(angle(car.angle, -45)) * 300 + point1.y)
-	visionLine3.setTo(middleX, middleY, Math.cos(car.body.angle) * 300 + middleX, Math.sin(car.body.angle) * 300 + middleY)
-	visionLine4.setTo(point2.x, point2.y, Math.cos(angle(car.angle, 45)) * 300 + point2.x, Math.sin(angle(car.angle, 45)) * 300 + point2.y)
-	visionLine5.setTo(point2.x, point2.y, Math.cos(angle(car.angle, 90)) * 300 + point2.x, Math.sin(angle(car.angle, 90)) * 300 + point2.y)
+	visionLine1.setTo(point1.x, point1.y, Math.cos(angle(car.angle, -90)) * visionSize + point1.x, Math.sin(angle(car.angle, -90)) * visionSize + point1.y)
+	visionLine2.setTo(point1.x, point1.y, Math.cos(angle(car.angle, -45)) * visionSize + point1.x, Math.sin(angle(car.angle, -45)) * visionSize + point1.y)
+	visionLine3.setTo(middleX, middleY, Math.cos(car.body.angle) * visionSize + middleX, Math.sin(car.body.angle) * visionSize + middleY)
+	visionLine4.setTo(point2.x, point2.y, Math.cos(angle(car.angle, 45)) * visionSize + point2.x, Math.sin(angle(car.angle, 45)) * visionSize + point2.y)
+	visionLine5.setTo(point2.x, point2.y, Math.cos(angle(car.angle, 90)) * visionSize + point2.x, Math.sin(angle(car.angle, 90)) * visionSize + point2.y)
 
 	let intersects: boolean = false
+	let visions: Phaser.Geom.Line[] = [visionLine1, visionLine2, visionLine3, visionLine4, visionLine5]
 	if (curve) {
-		for (let point of curve.getPoints()) {
-			if (Phaser.Geom.Intersects.PointToLine(point, visionLine3, 64)) {
-				visionLineGraphics.lineStyle(5, 0xff0000)
-				break
+		for (let vision of visions) {
+			for (let line of trackLines) {
+				let out = new Phaser.Geom.Point()
+				if (Phaser.Geom.Intersects.LineToLine(line, vision, out)) {
+					let point = vision.getPointA()
+					vision.setTo(point.x, point.y, out.x, out.y)
+					visionLineGraphics.fillPointShape(out, 10)
+					visionLineGraphics.lineStyle(2, 0xff0000)
+					break
+				}
 			}
 		}
 	}
-	for (let line of [visionLine1, visionLine2, visionLine3, visionLine4, visionLine5]) {
+	for (let line of visions) {
 		visionLineGraphics.strokeLineShape(line)
 	}
 

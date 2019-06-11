@@ -1,4 +1,27 @@
 export default class Car {
+
+	get visions(): Phaser.Geom.Line[] {
+		return [this.visionLine1, this.visionLine2, this.visionLine3, this.visionLine4, this.visionLine5]
+	}
+
+	get sides(): Phaser.Geom.Line[] {
+		let leftSide = new Phaser.Geom.Line(this.matterImage.getTopLeft().x, this.matterImage.getTopLeft().y, this.matterImage.getTopRight().x, this.matterImage.getTopRight().y)
+		let frontSide = new Phaser.Geom.Line(
+			this.matterImage.getTopRight().x,
+			this.matterImage.getTopRight().y,
+			this.matterImage.getBottomRight().x,
+			this.matterImage.getBottomRight().y
+		)
+		let downSide = new Phaser.Geom.Line(
+			this.matterImage.getBottomLeft().x,
+			this.matterImage.getBottomLeft().y,
+			this.matterImage.getBottomRight().x,
+			this.matterImage.getBottomRight().y
+		)
+		let backSide = new Phaser.Geom.Line(this.matterImage.getTopLeft().x, this.matterImage.getTopLeft().y, this.matterImage.getBottomLeft().x, this.matterImage.getBottomLeft().y)
+
+		return [leftSide, frontSide, downSide, backSide]
+	}
 	public matterImage: Phaser.Physics.Matter.Image
 	public graphics: Phaser.GameObjects.Graphics
 
@@ -16,6 +39,8 @@ export default class Car {
 	public fitness: number = 0
 	public onUpdate
 
+	private lastCheckpoint: Phaser.Geom.Line
+
 	constructor(scene: Phaser.Scene) {
 		this.matterImage = scene.matter.add.image(400, 615, 'car')
 		this.matterImage.setScale(0.3)
@@ -26,7 +51,7 @@ export default class Car {
 		this.graphics = scene.add.graphics({ lineStyle: { width: 2, color: 0xffffff } })
 	}
 
-	get inputs(): any {
+	public getInputs(): any {
 		// return {
 		// 	line1: Phaser.Geom.Line.Length(this.visionLine1),
 		// 	line2: Phaser.Geom.Line.Length(this.visionLine2),
@@ -45,40 +70,7 @@ export default class Car {
 		]
 	}
 
-	get visions(): Phaser.Geom.Line[] {
-		return [this.visionLine1, this.visionLine2, this.visionLine3, this.visionLine4, this.visionLine5]
-	}
-
-	get sides(): Phaser.Geom.Line[] {
-		let leftSide = new Phaser.Geom.Line(
-			this.matterImage.getTopLeft().x,
-			this.matterImage.getTopLeft().y,
-			this.matterImage.getTopRight().x,
-			this.matterImage.getTopRight().y
-		)
-		let frontSide = new Phaser.Geom.Line(
-			this.matterImage.getTopRight().x,
-			this.matterImage.getTopRight().y,
-			this.matterImage.getBottomRight().x,
-			this.matterImage.getBottomRight().y
-		)
-		let downSide = new Phaser.Geom.Line(
-			this.matterImage.getBottomLeft().x,
-			this.matterImage.getBottomLeft().y,
-			this.matterImage.getBottomRight().x,
-			this.matterImage.getBottomRight().y
-		)
-		let backSide = new Phaser.Geom.Line(
-			this.matterImage.getTopLeft().x,
-			this.matterImage.getTopLeft().y,
-			this.matterImage.getBottomLeft().x,
-			this.matterImage.getBottomLeft().y
-		)
-
-		return [leftSide, frontSide, downSide, backSide]
-	}
-
-	public update(trackLines: Phaser.Geom.Line[]) {
+	public update(trackLines: Phaser.Geom.Line[], checkpoints: Phaser.Geom.Line[]) {
 		if (this.onUpdate) {
 			this.onUpdate()
 		}
@@ -104,12 +96,7 @@ export default class Car {
 			Math.cos(angle(this.matterImage.angle, -45)) * visionSize + point1.x,
 			Math.sin(angle(this.matterImage.angle, -45)) * visionSize + point1.y
 		)
-		this.visionLine3.setTo(
-			middleX,
-			middleY,
-			Math.cos(this.matterImage.body.angle) * visionSize + middleX,
-			Math.sin(this.matterImage.body.angle) * visionSize + middleY
-		)
+		this.visionLine3.setTo(middleX, middleY, Math.cos(this.matterImage.body.angle) * visionSize + middleX, Math.sin(this.matterImage.body.angle) * visionSize + middleY)
 		this.visionLine4.setTo(
 			point2.x,
 			point2.y,
@@ -122,14 +109,27 @@ export default class Car {
 			Math.cos(angle(this.matterImage.angle, 90)) * visionSize + point2.x,
 			Math.sin(angle(this.matterImage.angle, 90)) * visionSize + point2.y
 		)
+		let bounds = this.matterImage.getBounds()
+		for (let checkpoint of checkpoints) {
+			if (Phaser.Geom.Intersects.LineToRectangle(checkpoint, bounds)) {
+				for (let carSide of this.sides) {
+					if (Phaser.Geom.Intersects.LineToLine(checkpoint, carSide) && this.lastCheckpoint != checkpoint) {
+						this.fitness++
+						this.lastCheckpoint = checkpoint
+					}
+				}
+			}
+		}
 
 		for (let line of trackLines) {
-			for (let carSide of this.sides) {
-				if (Phaser.Geom.Intersects.LineToLine(carSide, line)) {
-					this.alive = false
-					this.matterImage.setActive(false)
-					this.matterImage.destroy()
-					return
+			if (Phaser.Geom.Intersects.LineToRectangle(line, bounds)) {
+				for (let carSide of this.sides) {
+					if (Phaser.Geom.Intersects.LineToLine(carSide, line)) {
+						this.alive = false
+						this.matterImage.setActive(false)
+						this.matterImage.destroy()
+						return
+					}
 				}
 			}
 

@@ -1,6 +1,6 @@
 import Phaser, { Curves } from 'phaser'
 import Car from './car'
-import { startLearning } from './neural'
+import { startLearning } from './neat/neat'
 import Track from './track'
 
 let config: Phaser.Types.Core.GameConfig = {
@@ -64,7 +64,6 @@ function create(this: Phaser.Scene) {
 			localStorage.checkpoints = JSON.stringify(track.checkpoints)
 		}
 		if (key.code == 'KeyC') {
-			localStorage.removeItem('track')
 			track.curve = undefined
 			track.leftLines = []
 			track.rightLines = []
@@ -88,6 +87,9 @@ function update(this: Phaser.Scene) {
 			car.rightKey = cursors.right.isDown
 			car.upKey = cursors.up.isDown
 		}
-		car.update(track.trackLines)
+		car.update(track.trackLines, track.checkpoints)
+
+		let fitness = car.fitness
+		// document.getElementById('info').innerHTML = car.fitness + ''
 	}
 }

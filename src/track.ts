@@ -40,10 +40,10 @@ export default class Track {
 			this.graphics.strokeLineShape(line)
 		}
 
-		// this.graphics.lineStyle(1, 0xff0000)
-		// for (let line of this.checkpoints) {
-		// 	this.graphics.strokeLineShape(line)
-		// }
+		this.graphics.lineStyle(1, 0xff0000)
+		for (let line of this.checkpoints) {
+			this.graphics.strokeLineShape(line)
+		}
 
 		this.graphics.lineStyle(1, 0xffffff)
 		if (this.curve && this.showHelper) {
@@ -68,7 +68,7 @@ export default class Track {
 			let x = pointer.x
 			let y = pointer.y
 
-			if (Phaser.Math.Distance.Between(x, y, this.lastPosition.x, this.lastPosition.y) > 14) {
+			if (Phaser.Math.Distance.Between(x, y, this.lastPosition.x, this.lastPosition.y) > 64) {
 				this.lastPosition.x = x
 				this.lastPosition.y = y
 

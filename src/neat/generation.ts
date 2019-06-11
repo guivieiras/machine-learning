@@ -2,7 +2,7 @@ import { generateKeyPairSync } from 'crypto'
 import Gene from './gene'
 
 export default class Generation {
-	public genes: Gene[]
+	public genes: Gene[] = []
 
 	public forwardGeneration() {
 		// ignore

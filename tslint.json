@@ -3,6 +3,9 @@
 	"rules": {
 		"prefer-const": false,
 		"align": false,
-		"max-line-length": [true, 999]
+		"max-line-length": [true, 999],
+		"object-literal-sort-keys": false,
+		"no-unused-expression": false,
+		"no-console": false
 	}
 }

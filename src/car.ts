@@ -1,11 +1,15 @@
 export default class Car {
-
 	get visions(): Phaser.Geom.Line[] {
 		return [this.visionLine1, this.visionLine2, this.visionLine3, this.visionLine4, this.visionLine5]
 	}
 
 	get sides(): Phaser.Geom.Line[] {
-		let leftSide = new Phaser.Geom.Line(this.matterImage.getTopLeft().x, this.matterImage.getTopLeft().y, this.matterImage.getTopRight().x, this.matterImage.getTopRight().y)
+		let leftSide = new Phaser.Geom.Line(
+			this.matterImage.getTopLeft().x,
+			this.matterImage.getTopLeft().y,
+			this.matterImage.getTopRight().x,
+			this.matterImage.getTopRight().y
+		)
 		let frontSide = new Phaser.Geom.Line(
 			this.matterImage.getTopRight().x,
 			this.matterImage.getTopRight().y,
@@ -37,7 +41,8 @@ export default class Car {
 	public downKey: boolean = false
 
 	public fitness: number = 0
-	public onUpdate
+
+	public onUpdate: (car: Car) => void
 
 	private lastCheckpoint: Phaser.Geom.Line
 
@@ -72,7 +77,7 @@ export default class Car {
 
 	public update(trackLines: Phaser.Geom.Line[], checkpoints: Phaser.Geom.Line[]) {
 		if (this.onUpdate) {
-			this.onUpdate()
+			this.onUpdate(this)
 		}
 
 		let point1 = this.matterImage.getTopRight()
@@ -113,7 +118,7 @@ export default class Car {
 		for (let checkpoint of checkpoints) {
 			if (Phaser.Geom.Intersects.LineToRectangle(checkpoint, bounds)) {
 				for (let carSide of this.sides) {
-					if (Phaser.Geom.Intersects.LineToLine(checkpoint, carSide) && this.lastCheckpoint != checkpoint) {
+					if (Phaser.Geom.Intersects.LineToLine(checkpoint, carSide) && this.lastCheckpoint !== checkpoint) {
 						this.fitness++
 						this.lastCheckpoint = checkpoint
 					}

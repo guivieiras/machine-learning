@@ -1,9 +1,7 @@
-import Car from '../car'
+import Gene from './gene'
 
 export default class Brain {
-	public car: Car
-	constructor(car: Car) {
-		this.car = car
+	public think(input: number[], gene: Gene): number[] {
+		return [1]
 	}
-	public onUpdate() {}
 }

@@ -55,15 +55,15 @@ function create(this: Phaser.Scene) {
 
 	document.addEventListener('keyup', key => {
 		console.log(key.code)
-		if (key.code == 'Semicolon') {
+		if (key.code === 'Semicolon') {
 			startLearning(this, cars)
 		}
-		if (key.code == 'KeyS') {
+		if (key.code === 'KeyS') {
 			localStorage.leftLines = JSON.stringify(track.leftLines)
 			localStorage.rightLines = JSON.stringify(track.rightLines)
 			localStorage.checkpoints = JSON.stringify(track.checkpoints)
 		}
-		if (key.code == 'KeyC') {
+		if (key.code === 'KeyC') {
 			track.curve = undefined
 			track.leftLines = []
 			track.rightLines = []

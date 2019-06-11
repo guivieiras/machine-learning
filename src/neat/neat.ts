@@ -1,10 +1,11 @@
 import Car from '../car'
 import Brain from './brain'
+import Entity from './entity'
 import Gene from './gene'
 import Generation from './generation'
 import Genome from './genome'
 
-let populationSize: number = 10
+let populationSize: number = 100
 
 let genome = new Genome()
 
@@ -14,15 +15,9 @@ export function startLearning(scene: Phaser.Scene, cars: Car[]) {
 
 	for (let gene of genes) {
 		let car = new Car(scene)
-		gene.getInputs = car.getInputs
-		gene.brain = new Brain(car.onUpdate)
+		let brain = new Brain()
 
+		let entity = new Entity(car, gene, brain)
 		cars.push(car)
-		carBrain(car)
 	}
-}
-
-function carBrain(car: Car) {
-	let brain = new Brain(car)
-	car.onUpdate = brain.onUpdate
 }

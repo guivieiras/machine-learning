@@ -1,6 +1,6 @@
 import Phaser, { Curves } from 'phaser'
 import Car from './car'
-import { startLearning } from './neat/neat'
+import { startLearning, updateLearning } from './neat/neat'
 import Track from './track'
 
 let config: Phaser.Types.Core.GameConfig = {
@@ -58,6 +58,9 @@ function create(this: Phaser.Scene) {
 		if (key.code === 'Semicolon') {
 			startLearning(this, cars)
 		}
+		if (key.code === 'KeyA') {
+			cars.push(new Car(this))
+		}
 		if (key.code === 'KeyS') {
 			localStorage.leftLines = JSON.stringify(track.leftLines)
 			localStorage.rightLines = JSON.stringify(track.rightLines)
@@ -88,8 +91,6 @@ function update(this: Phaser.Scene) {
 			car.upKey = cursors.up.isDown
 		}
 		car.update(track.trackLines, track.checkpoints)
-
-		let fitness = car.fitness
-		// document.getElementById('info').innerHTML = car.fitness + ''
 	}
+	updateLearning(this, cars)
 }

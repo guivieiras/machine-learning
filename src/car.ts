@@ -49,13 +49,15 @@ export default class Car {
 	public entity: Entity
 
 	public fitness: number = 0
+	public aliveTicks: number = 0
+	public ticksToDie: number = 100
 
 	public onUpdate: (car: Car) => void
 
 	private lastCheckpoint: Phaser.Geom.Line
 
 	constructor(scene: Phaser.Scene) {
-		this.matterImage = scene.matter.add.image(400, 615, 'car')
+		this.matterImage = scene.matter.add.image(400, 665, 'car')
 		this.matterImage.setScale(0.3)
 		this.matterImage.setFrictionAir(0.07)
 		this.matterImage.setMass(10)
@@ -65,14 +67,6 @@ export default class Car {
 	}
 
 	public getInputs(): number[] {
-		// return {
-		// 	line1: Phaser.Geom.Line.Length(this.visionLine1),
-		// 	line2: Phaser.Geom.Line.Length(this.visionLine2),
-		// 	line3: Phaser.Geom.Line.Length(this.visionLine3),
-		// 	line4: Phaser.Geom.Line.Length(this.visionLine4),
-		// 	line5: Phaser.Geom.Line.Length(this.visionLine5),
-		// 	speed: this.matterImage.body.speed
-		// }
 		return [
 			Phaser.Geom.Line.Length(this.visionLine1),
 			Phaser.Geom.Line.Length(this.visionLine2),
@@ -134,19 +128,21 @@ export default class Car {
 					if (Phaser.Geom.Intersects.LineToLine(checkpoint, carSide) && this.lastCheckpoint !== checkpoint) {
 						this.fitness++
 						this.lastCheckpoint = checkpoint
+						this.ticksToDie = 100
 					}
 				}
 			}
 		}
-
+		this.aliveTicks++
+		this.ticksToDie--
+		if (this.ticksToDie <= 0) {
+			return this.kill()
+		}
 		for (let line of trackLines) {
 			if (Phaser.Geom.Intersects.LineToRectangle(line, bounds)) {
 				for (let carSide of this.sides) {
 					if (Phaser.Geom.Intersects.LineToLine(carSide, line)) {
-						this.alive = false
-						this.matterImage.setActive(false)
-						this.matterImage.destroy()
-						return
+						return this.kill()
 					}
 				}
 			}
@@ -179,6 +175,12 @@ export default class Car {
 		} else if (this.downKey) {
 			this.matterImage.thrustBack(0.01)
 		}
+	}
+
+	public kill() {
+		this.alive = false
+		this.matterImage.setActive(false)
+		this.matterImage.destroy()
 	}
 }
 

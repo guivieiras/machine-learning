@@ -13,70 +13,110 @@ export default class Entity {
 	public car: Car
 
 	public getInputs: () => number[]
+	public count = 0
 
 	constructor(car: Car, gene: Gene, brain: Brain) {
 		// gene.hiddenLayer.neurons = [1, 2, 3, 4, 5].map(x => new Neuron())
 		this.gene = gene
 		this.brain = brain
 		this.car = car
-		gene.inputLayer.neurons = new Array(car.getInputs().length).fill(new Neuron())
-		gene.outputLayer.neurons = new Array(4).fill(new Neuron())
-
-		for (let neuron of gene.inputLayer.neurons) {
-			for (let n of gene.outputLayer.neurons) {
-				// neuron.value = Math.random() * 2 - 1
-				neuron.connections.push(new Connection(n, Math.random() * 2 - 1))
-			}
-		}
 	}
 
 	public think() {
 		// ignore
 	}
-
 	public update(car: Car) {
-		let input = Math.round(Math.random())
+		let inputs = car.getInputs()
 		for (let i = 0; i < this.gene.inputLayer.neurons.length; i++) {
-			this.gene.inputLayer.neurons[i].value = car.getInputs()[i]
-
+			this.gene.inputLayer.neurons[i].value = inputs[i]
 			for (let connection of this.gene.inputLayer.neurons[i].connections) {
-				console.log(
-					connection.weight,
-					this.gene.inputLayer.neurons[i].value,
-					sigmoid(connection.weight * this.gene.inputLayer.neurons[i].value)
-				)
-				connection.to.value = sigmoid(connection.weight * this.gene.inputLayer.neurons[i].value)
+				connection.to.value = connection.weight * this.gene.inputLayer.neurons[i].value
 			}
 		}
+		if (this.count++ === 1) {
+			// throw new Error('oie')
+		}
+		// for (let i = 0; i < this.gene.outputLayer.neurons.length; i++) {
+		// this.gene.outputLayer.neurons[i].value = sigmoid(this.gene.outputLayer.neurons[i].value)
+		// }
 
-		for (let i = 0; i < this.gene.outputLayer.neurons.length; i++) {
-			if (i === 0 && this.gene.outputLayer.neurons[i].value > 0.5) {
-				this.car.upKey = true
-				this.car.downKey = false
-			}
-			if (i === 1 && this.gene.outputLayer.neurons[i].value > 0.5) {
-				this.car.upKey = false
-				this.car.downKey = true
-			}
-			if (i === 2 && this.gene.outputLayer.neurons[i].value > 0.5) {
-				this.car.leftKey = true
-				this.car.rightKey = false
-			}
-			if (i === 3 && this.gene.outputLayer.neurons[i].value > 0.5) {
-				this.car.leftKey = false
-				this.car.rightKey = true
-			}
+		this.fourOut()
+	}
+
+	public sixOut() {
+		if (
+			this.gene.outputLayer.neurons[0].value > this.gene.outputLayer.neurons[1].value &&
+			this.gene.outputLayer.neurons[0].value > this.gene.outputLayer.neurons[2].value
+		) {
+			this.car.upKey = true
+			this.car.downKey = false
+		} else if (
+			this.gene.outputLayer.neurons[1].value > this.gene.outputLayer.neurons[0].value &&
+			this.gene.outputLayer.neurons[1].value > this.gene.outputLayer.neurons[2].value
+		) {
+			this.car.upKey = false
+			this.car.downKey = true
+		} else {
+			this.car.upKey = false
+			this.car.downKey = false
 		}
-		// if (input === 0) {
-		// 	car.rightKey = true
-		// 	car.leftKey = false
-		// }
-		// if (input === 1) {
-		// 	car.rightKey = false
-		// 	car.leftKey = true
-		// }
-		// car.upKey = true
-		// ignore
+		if (
+			this.gene.outputLayer.neurons[3].value > this.gene.outputLayer.neurons[4].value &&
+			this.gene.outputLayer.neurons[3].value > this.gene.outputLayer.neurons[5].value
+		) {
+			this.car.leftKey = true
+			this.car.rightKey = false
+		} else if (
+			this.gene.outputLayer.neurons[4].value > this.gene.outputLayer.neurons[3].value &&
+			this.gene.outputLayer.neurons[4].value > this.gene.outputLayer.neurons[5].value
+		) {
+			this.car.leftKey = false
+			this.car.rightKey = true
+		} else {
+			this.car.leftKey = false
+			this.car.rightKey = false
+		}
+	}
+
+	public fourOut() {
+		if (this.gene.outputLayer.neurons[0].value > this.gene.outputLayer.neurons[1].value) {
+			this.car.upKey = true
+		} else {
+			this.car.upKey = false
+		}
+		if (this.gene.outputLayer.neurons[2].value > this.gene.outputLayer.neurons[3].value) {
+			this.car.leftKey = true
+			this.car.rightKey = false
+		} else {
+			this.car.leftKey = false
+			this.car.rightKey = true
+		}
+	}
+
+	public fiveOut() {
+		if (this.gene.outputLayer.neurons[0].value > this.gene.outputLayer.neurons[1].value) {
+			this.car.upKey = true
+			this.car.downKey = false
+		} else {
+			this.car.upKey = false
+			this.car.downKey = false
+		}
+		if (
+			this.gene.outputLayer.neurons[2].value > this.gene.outputLayer.neurons[3].value &&
+			this.gene.outputLayer.neurons[2].value > this.gene.outputLayer.neurons[4].value
+		) {
+			this.car.leftKey = true
+			this.car.rightKey = false
+		} else if (
+			this.gene.outputLayer.neurons[3].value > this.gene.outputLayer.neurons[2].value &&
+			this.gene.outputLayer.neurons[3].value > this.gene.outputLayer.neurons[4].value
+		) {
+			this.car.leftKey = false
+			this.car.rightKey = true
+		} else {
+			this.car.leftKey = false
+			this.car.rightKey = false
+		}
 	}
 }
 

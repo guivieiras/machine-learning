@@ -92,7 +92,7 @@ export default class Track {
 					this.leftLines.push(new Phaser.Geom.Line(this.leftPrevious.x, this.leftPrevious.y, left.x, left.y))
 					this.rightLines.push(new Phaser.Geom.Line(this.rightPrevious.x, this.rightPrevious.y, right.x, right.y))
 				}
-				if (this.leftLines.length % 10 == 0) {
+				if (this.leftLines.length % 2 === 0) {
 					this.checkpoints.push(new Phaser.Geom.Line(left.x, left.y, right.x, right.y))
 				}
 

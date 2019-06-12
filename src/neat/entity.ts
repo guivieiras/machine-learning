@@ -27,49 +27,37 @@ export default class Entity {
 	}
 	public update(car: Car) {
 		let inputs = car.getInputs()
-		for (let i = 0; i < this.gene.inputLayer.neurons.length; i++) {
-			this.gene.inputLayer.neurons[i].value = inputs[i]
-			for (let connection of this.gene.inputLayer.neurons[i].connections) {
-				connection.to.value = connection.weight * this.gene.inputLayer.neurons[i].value
+		for (let i = 0; i < this.gene.inputLayer.length; i++) {
+			this.gene.inputLayer[i].value = inputs[i]
+			for (let connection of this.gene.inputLayer[i].connections) {
+				connection.to.value = connection.weight * this.gene.inputLayer[i].value
 			}
 		}
 		if (this.count++ === 1) {
 			// throw new Error('oie')
 		}
-		// for (let i = 0; i < this.gene.outputLayer.neurons.length; i++) {
-		// this.gene.outputLayer.neurons[i].value = sigmoid(this.gene.outputLayer.neurons[i].value)
+		// for (let i = 0; i < this.gene.outputLayer.length; i++) {
+		// 	this.gene.outputLayer[i].value = sigmoid(this.gene.outputLayer[i].value)
 		// }
 
-		this.fourOut()
+		this.fiveOut()
 	}
 
 	public sixOut() {
-		if (
-			this.gene.outputLayer.neurons[0].value > this.gene.outputLayer.neurons[1].value &&
-			this.gene.outputLayer.neurons[0].value > this.gene.outputLayer.neurons[2].value
-		) {
+		if (this.gene.outputLayer[0].value > this.gene.outputLayer[1].value && this.gene.outputLayer[0].value > this.gene.outputLayer[2].value) {
 			this.car.upKey = true
 			this.car.downKey = false
-		} else if (
-			this.gene.outputLayer.neurons[1].value > this.gene.outputLayer.neurons[0].value &&
-			this.gene.outputLayer.neurons[1].value > this.gene.outputLayer.neurons[2].value
-		) {
+		} else if (this.gene.outputLayer[1].value > this.gene.outputLayer[0].value && this.gene.outputLayer[1].value > this.gene.outputLayer[2].value) {
 			this.car.upKey = false
 			this.car.downKey = true
 		} else {
 			this.car.upKey = false
 			this.car.downKey = false
 		}
-		if (
-			this.gene.outputLayer.neurons[3].value > this.gene.outputLayer.neurons[4].value &&
-			this.gene.outputLayer.neurons[3].value > this.gene.outputLayer.neurons[5].value
-		) {
+		if (this.gene.outputLayer[3].value > this.gene.outputLayer[4].value && this.gene.outputLayer[3].value > this.gene.outputLayer[5].value) {
 			this.car.leftKey = true
 			this.car.rightKey = false
-		} else if (
-			this.gene.outputLayer.neurons[4].value > this.gene.outputLayer.neurons[3].value &&
-			this.gene.outputLayer.neurons[4].value > this.gene.outputLayer.neurons[5].value
-		) {
+		} else if (this.gene.outputLayer[4].value > this.gene.outputLayer[3].value && this.gene.outputLayer[4].value > this.gene.outputLayer[5].value) {
 			this.car.leftKey = false
 			this.car.rightKey = true
 		} else {
@@ -79,12 +67,12 @@ export default class Entity {
 	}
 
 	public fourOut() {
-		if (this.gene.outputLayer.neurons[0].value > this.gene.outputLayer.neurons[1].value) {
+		if (this.gene.outputLayer[0].value > this.gene.outputLayer[1].value) {
 			this.car.upKey = true
 		} else {
 			this.car.upKey = false
 		}
-		if (this.gene.outputLayer.neurons[2].value > this.gene.outputLayer.neurons[3].value) {
+		if (this.gene.outputLayer[2].value > this.gene.outputLayer[3].value) {
 			this.car.leftKey = true
 			this.car.rightKey = false
 		} else {
@@ -94,23 +82,17 @@ export default class Entity {
 	}
 
 	public fiveOut() {
-		if (this.gene.outputLayer.neurons[0].value > this.gene.outputLayer.neurons[1].value) {
+		if (this.gene.outputLayer[0].value > this.gene.outputLayer[1].value) {
 			this.car.upKey = true
 			this.car.downKey = false
 		} else {
 			this.car.upKey = false
 			this.car.downKey = false
 		}
-		if (
-			this.gene.outputLayer.neurons[2].value > this.gene.outputLayer.neurons[3].value &&
-			this.gene.outputLayer.neurons[2].value > this.gene.outputLayer.neurons[4].value
-		) {
+		if (this.gene.outputLayer[2].value > this.gene.outputLayer[3].value && this.gene.outputLayer[2].value > this.gene.outputLayer[4].value) {
 			this.car.leftKey = true
 			this.car.rightKey = false
-		} else if (
-			this.gene.outputLayer.neurons[3].value > this.gene.outputLayer.neurons[2].value &&
-			this.gene.outputLayer.neurons[3].value > this.gene.outputLayer.neurons[4].value
-		) {
+		} else if (this.gene.outputLayer[3].value > this.gene.outputLayer[2].value && this.gene.outputLayer[3].value > this.gene.outputLayer[4].value) {
 			this.car.leftKey = false
 			this.car.rightKey = true
 		} else {

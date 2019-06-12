@@ -6,7 +6,7 @@ import Gene from './gene'
 import Generation from './generation'
 import Genome from './genome'
 
-let populationSize: number = 100
+let populationSize: number = 1000
 
 let genome = new Genome()
 
@@ -35,8 +35,6 @@ export function updateLearning(scene: Scene, cars: Car[]) {
 				return next
 			}
 		})
-		// console.log(bestFitness)
-		return
 		let thisGeneration = genome.generations[genome.generations.length - 1]
 		thisGeneration.forwardGeneration(bestFitness.entity.gene)
 		for (let gene of thisGeneration.genes) {
@@ -46,8 +44,6 @@ export function updateLearning(scene: Scene, cars: Car[]) {
 			let entity = new Entity(car, gene, brain)
 			car.entity = entity
 
-			// console.log(car)
-			// throw new Error('oie')
 			cars.push(car)
 		}
 	}

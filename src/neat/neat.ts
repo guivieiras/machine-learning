@@ -5,7 +5,7 @@ import Gene from './gene'
 import Generation from './generation'
 import Genome from './genome'
 
-let populationSize: number = 100
+let populationSize: number = 10
 
 let genome = new Genome()
 
@@ -18,6 +18,7 @@ export function startLearning(scene: Phaser.Scene, cars: Car[]) {
 		let brain = new Brain()
 
 		let entity = new Entity(car, gene, brain)
+		car.entity = entity
 		cars.push(car)
 	}
 }

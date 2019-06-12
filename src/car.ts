@@ -1,3 +1,5 @@
+import Entity from './neat/entity'
+
 export default class Car {
 	get visions(): Phaser.Geom.Line[] {
 		return [this.visionLine1, this.visionLine2, this.visionLine3, this.visionLine4, this.visionLine5]
@@ -22,7 +24,12 @@ export default class Car {
 			this.matterImage.getBottomRight().x,
 			this.matterImage.getBottomRight().y
 		)
-		let backSide = new Phaser.Geom.Line(this.matterImage.getTopLeft().x, this.matterImage.getTopLeft().y, this.matterImage.getBottomLeft().x, this.matterImage.getBottomLeft().y)
+		let backSide = new Phaser.Geom.Line(
+			this.matterImage.getTopLeft().x,
+			this.matterImage.getTopLeft().y,
+			this.matterImage.getBottomLeft().x,
+			this.matterImage.getBottomLeft().y
+		)
 
 		return [leftSide, frontSide, downSide, backSide]
 	}
@@ -39,6 +46,7 @@ export default class Car {
 	public rightKey: boolean = false
 	public upKey: boolean = false
 	public downKey: boolean = false
+	public entity: Entity
 
 	public fitness: number = 0
 
@@ -56,7 +64,7 @@ export default class Car {
 		this.graphics = scene.add.graphics({ lineStyle: { width: 2, color: 0xffffff } })
 	}
 
-	public getInputs(): any {
+	public getInputs(): number[] {
 		// return {
 		// 	line1: Phaser.Geom.Line.Length(this.visionLine1),
 		// 	line2: Phaser.Geom.Line.Length(this.visionLine2),
@@ -76,8 +84,8 @@ export default class Car {
 	}
 
 	public update(trackLines: Phaser.Geom.Line[], checkpoints: Phaser.Geom.Line[]) {
-		if (this.onUpdate) {
-			this.onUpdate(this)
+		if (this.entity) {
+			this.entity.update(this)
 		}
 
 		let point1 = this.matterImage.getTopRight()
@@ -101,7 +109,12 @@ export default class Car {
 			Math.cos(angle(this.matterImage.angle, -45)) * visionSize + point1.x,
 			Math.sin(angle(this.matterImage.angle, -45)) * visionSize + point1.y
 		)
-		this.visionLine3.setTo(middleX, middleY, Math.cos(this.matterImage.body.angle) * visionSize + middleX, Math.sin(this.matterImage.body.angle) * visionSize + middleY)
+		this.visionLine3.setTo(
+			middleX,
+			middleY,
+			Math.cos(this.matterImage.body.angle) * visionSize + middleX,
+			Math.sin(this.matterImage.body.angle) * visionSize + middleY
+		)
 		this.visionLine4.setTo(
 			point2.x,
 			point2.y,

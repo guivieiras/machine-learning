@@ -6,7 +6,7 @@ import Gene from './gene'
 import Generation from './generation'
 import Genome from './genome'
 
-let populationSize: number = 1000
+let populationSize: number = 100
 
 let genome = new Genome()
 
@@ -25,6 +25,10 @@ export function startLearning(scene: Phaser.Scene, cars: Car[]) {
 }
 
 export function updateLearning(scene: Scene, cars: Car[]) {
+	if (cars[0]) {
+		// document.getElementById('info').innerText = JSON.stringify(cars[0].entity.gene, null, 2)
+	}
+
 	if (cars.length > 0 && cars.every(x => !x.alive)) {
 		let bestFitness = cars.reduce((acc, next) => {
 			if (acc.fitness > next.fitness) {
@@ -35,6 +39,7 @@ export function updateLearning(scene: Scene, cars: Car[]) {
 				return next
 			}
 		})
+		// return
 		let thisGeneration = genome.generations[genome.generations.length - 1]
 		thisGeneration.forwardGeneration(bestFitness.entity.gene)
 		for (let gene of thisGeneration.genes) {

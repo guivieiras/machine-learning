@@ -15,13 +15,19 @@ export default class Generation {
 					connection.weight += (Math.random() * 2) / 10 - 0.2
 				}
 
-				for (let outNeuron of this.genes[i].outputLayer) {
-					if (neuron.connections.every(x => x.to.id !== outNeuron.id)) {
-						let rnd = Math.random() * 2 - 1
-						if (rnd > 0.8) {
-							neuron.connections.push(new Connection(outNeuron, Math.random() * 2 - 1))
-						}
-					}
+				// for (let outNeuron of this.genes[i].outputLayer) {
+				// 	if (neuron.connections.every(x => x.to.id !== outNeuron.id)) {
+				// 		let rnd = Math.random() * 2 - 1
+				// 		if (rnd > 0.8) {
+				// 			neuron.connections.push(new Connection(outNeuron, Math.random() * 2 - 1))
+				// 		}
+				// 	}
+				// }
+			}
+
+			for (let neuron of this.genes[i].hiddenLayer) {
+				for (let connection of neuron.connections) {
+					connection.weight += (Math.random() * 2) / 10 - 0.2
 				}
 			}
 		}

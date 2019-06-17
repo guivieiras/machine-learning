@@ -58,6 +58,10 @@ function create(this: Phaser.Scene) {
 		if (key.code === 'Semicolon') {
 			startLearning(this, cars)
 		}
+		if (key.code === 'KeyK') {
+			isUserPlaying = true
+			cars.push(new Car(this))
+		}
 		if (key.code === 'KeyA') {
 			cars.push(new Car(this))
 		}
@@ -80,11 +84,11 @@ function create(this: Phaser.Scene) {
 	cursors = this.input.keyboard.createCursorKeys()
 	this.matter.world.setBounds(0, 0, 1280, 720)
 }
-
+let isUserPlaying
 function update(this: Phaser.Scene) {
 	track.update()
 	for (let car of cars.filter(x => x.alive)) {
-		if (true) {
+		if (isUserPlaying) {
 			car.downKey = cursors.down.isDown
 			car.leftKey = cursors.left.isDown
 			car.rightKey = cursors.right.isDown
@@ -92,5 +96,7 @@ function update(this: Phaser.Scene) {
 		}
 		car.update(track.trackLines, track.checkpoints)
 	}
-	updateLearning(this, cars)
+	if (!isUserPlaying) {
+		updateLearning(this, cars)
+	}
 }

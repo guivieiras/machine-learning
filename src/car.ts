@@ -50,8 +50,8 @@ export default class Car {
 
 	public fitness: number = 0
 	public aliveTicks: number = 0
-	public ticksToDie: number = 30
-	public defaultTicksToDie: number = 30
+	public ticksToDie: number = 150
+	public defaultTicksToDie: number = 150
 
 	public onUpdate: (car: Car) => void
 
@@ -159,7 +159,7 @@ export default class Car {
 			}
 		}
 		for (let line of this.visions) {
-			// this.graphics.strokeLineShape(line)
+			this.graphics.strokeLineShape(line)
 		}
 
 		// let angle = { x: speed * Math.cos(car.angle), y: speed * Math.sin(car.body.angle) }

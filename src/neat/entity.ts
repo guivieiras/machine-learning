@@ -26,11 +26,29 @@ export default class Entity {
 		// ignore
 	}
 	public update(car: Car) {
+		for (let n of this.gene.hiddenLayer) {
+			n.value = 0
+		}
+		for (let n of this.gene.inputLayer) {
+			n.value = 0
+		}
+		for (let n of this.gene.outputLayer) {
+			n.value = 0
+		}
+
 		let inputs = car.getInputs()
 		for (let i = 0; i < this.gene.inputLayer.length; i++) {
 			this.gene.inputLayer[i].value = inputs[i]
 			for (let connection of this.gene.inputLayer[i].connections) {
-				connection.to.value = connection.weight * this.gene.inputLayer[i].value
+				connection.to.value += connection.weight * this.gene.inputLayer[i].value
+			}
+		}
+		// for (let i = 0; i < this.gene.hiddenLayer.length; i++) {
+		// this.gene.hiddenLayer[i].value = sigmoid(this.gene.hiddenLayer[i].value)
+		// }
+		for (let i = 0; i < this.gene.hiddenLayer.length; i++) {
+			for (let connection of this.gene.hiddenLayer[i].connections) {
+				connection.to.value += connection.weight * this.gene.hiddenLayer[i].value
 			}
 		}
 		if (this.count++ === 1) {

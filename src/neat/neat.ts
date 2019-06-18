@@ -6,7 +6,7 @@ import Gene from './gene'
 import Generation from './generation'
 import Genome from './genome'
 
-let populationSize: number = 100
+let populationSize: number = 200
 
 let genome = new Genome()
 
@@ -30,18 +30,15 @@ export function updateLearning(scene: Scene, cars: Car[]) {
 	}
 
 	if (cars.length > 0 && cars.every(x => !x.alive)) {
-		let bestFitness = cars.reduce((acc, next) => {
-			if (acc.fitness > next.fitness) {
-				return acc
-			} else if (acc.fitness === next.fitness && acc.aliveTicks < next.aliveTicks) {
-				return acc
-			} else {
-				return next
-			}
-		})
+		let bestFitness = cars
+			.sort((a, b) => {
+				return b.fitness - a.fitness
+			})
+			.map(o => o.entity.gene)
+			.slice(0, 2)
 		// return
 		let thisGeneration = genome.generations[genome.generations.length - 1]
-		thisGeneration.forwardGeneration(bestFitness.entity.gene)
+		thisGeneration.forwardGeneration(bestFitness[0], bestFitness[1])
 		for (let gene of thisGeneration.genes) {
 			let car = new Car(scene)
 			let brain = new Brain()

@@ -5,29 +5,20 @@ import Gene from './gene'
 export default class Generation {
 	public genes: Gene[] = []
 
-	public forwardGeneration(gene: Gene) {
-		this.genes[0] = gene.clone()
-		for (let i = 1; i < this.genes.length; i++) {
-			this.genes[i] = gene.clone()
-
+	public forwardGeneration(best: Gene, second: Gene) {
+		this.genes[0] = best
+		this.genes[1] = second
+		for (let i = 2; i < this.genes.length; i++) {
+			this.genes[i] = i < this.genes.length / 2 ? best.clone() : second.clone()
 			for (let neuron of this.genes[i].inputLayer) {
 				for (let connection of neuron.connections) {
-					connection.weight += (Math.random() * 2) / 10 - 0.2
+					connection.weight += (Math.random() * 4) / 10 - 0.2
 				}
-
-				// for (let outNeuron of this.genes[i].outputLayer) {
-				// 	if (neuron.connections.every(x => x.to.id !== outNeuron.id)) {
-				// 		let rnd = Math.random() * 2 - 1
-				// 		if (rnd > 0.8) {
-				// 			neuron.connections.push(new Connection(outNeuron, Math.random() * 2 - 1))
-				// 		}
-				// 	}
-				// }
 			}
 
 			for (let neuron of this.genes[i].hiddenLayer) {
 				for (let connection of neuron.connections) {
-					connection.weight += (Math.random() * 2) / 10 - 0.2
+					connection.weight += (Math.random() * 4) / 10 - 0.2
 				}
 			}
 		}

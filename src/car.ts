@@ -5,6 +5,8 @@ export default class Car {
 		return [this.visionLine1, this.visionLine2, this.visionLine3, this.visionLine4, this.visionLine5]
 	}
 
+	public static forward: boolean = true
+
 	get sides(): Phaser.Geom.Line[] {
 		let leftSide = new Phaser.Geom.Line(
 			this.matterImage.getTopLeft().x,
@@ -46,6 +48,7 @@ export default class Car {
 	public rightKey: boolean = false
 	public upKey: boolean = false
 	public downKey: boolean = false
+	public steerRatio: number
 	public entity: Entity
 
 	public fitness: number = 0
@@ -63,6 +66,7 @@ export default class Car {
 		this.matterImage.setFrictionAir(0.07)
 		this.matterImage.setMass(10)
 		this.matterImage.setCollisionGroup(-1)
+		this.matterImage.setRotation(!Car.forward ? 0 : Math.PI)
 
 		this.graphics = scene.add.graphics({ lineStyle: { width: 2, color: 0xffffff } })
 	}
@@ -166,7 +170,9 @@ export default class Car {
 
 		let angleTurn = this.matterImage.body.speed > 0.1 ? this.matterImage.body.speed * 0.55 : 0
 
-		if (this.leftKey) {
+		if (this.steerRatio !== undefined) {
+			this.matterImage.angle += angleTurn * this.steerRatio
+		} else if (this.leftKey) {
 			this.matterImage.angle -= angleTurn
 		} else if (this.rightKey) {
 			this.matterImage.angle += angleTurn

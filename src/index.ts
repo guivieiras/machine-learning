@@ -65,6 +65,9 @@ function create(this: Phaser.Scene) {
 		if (key.code === 'KeyA') {
 			cars.push(new Car(this))
 		}
+		if (key.code === 'KeyR') {
+			Car.forward = !Car.forward
+		}
 		if (key.code === 'KeyS') {
 			localStorage.leftLines = JSON.stringify(track.leftLines)
 			localStorage.rightLines = JSON.stringify(track.rightLines)

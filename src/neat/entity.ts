@@ -16,15 +16,11 @@ export default class Entity {
 	public count = 0
 
 	constructor(car: Car, gene: Gene, brain: Brain) {
-		// gene.hiddenLayer.neurons = [1, 2, 3, 4, 5].map(x => new Neuron())
 		this.gene = gene
 		this.brain = brain
 		this.car = car
 	}
 
-	public think() {
-		// ignore
-	}
 	public update(car: Car) {
 		for (let n of this.gene.hiddenLayer) {
 			n.value = 0
@@ -38,13 +34,16 @@ export default class Entity {
 
 		let inputs = car.getInputs()
 		for (let i = 0; i < this.gene.inputLayer.length; i++) {
-			this.gene.inputLayer[i].value = inputs[i]
-			for (let connection of this.gene.inputLayer[i].connections) {
-				connection.to.value += connection.weight * this.gene.inputLayer[i].value
+			let neuron = this.gene.inputLayer[i]
+			neuron.maxvalue = Math.max(neuron.maxvalue, inputs[i])
+			neuron.minvalue = Math.min(neuron.minvalue, inputs[i])
+			neuron.value = remap(inputs[i], 0, 500, 0, 1)
+			for (let connection of neuron.connections) {
+				connection.to.value += connection.weight * neuron.value
 			}
 		}
 		// for (let i = 0; i < this.gene.hiddenLayer.length; i++) {
-		// this.gene.hiddenLayer[i].value = sigmoid(this.gene.hiddenLayer[i].value)
+		// 	this.gene.hiddenLayer[i].value = sigmoid(this.gene.hiddenLayer[i].value)
 		// }
 		for (let i = 0; i < this.gene.hiddenLayer.length; i++) {
 			for (let connection of this.gene.hiddenLayer[i].connections) {
@@ -58,7 +57,7 @@ export default class Entity {
 		// 	this.gene.outputLayer[i].value = sigmoid(this.gene.outputLayer[i].value)
 		// }
 
-		this.fiveOut()
+		this.steer3()
 	}
 
 	public sixOut() {
@@ -82,6 +81,17 @@ export default class Entity {
 			this.car.leftKey = false
 			this.car.rightKey = false
 		}
+	}
+
+	public steer3() {
+		if (this.gene.outputLayer[0].value > this.gene.outputLayer[1].value) {
+			this.car.upKey = true
+			this.car.downKey = false
+		} else {
+			this.car.upKey = false
+			this.car.downKey = false
+		}
+		this.car.steerRatio = this.gene.outputLayer[2].value
 	}
 
 	public fourOut() {
@@ -122,4 +132,8 @@ export default class Entity {
 
 function sigmoid(t) {
 	return 1 / (1 + Math.pow(Math.E, -t))
+}
+
+function remap(n, start1, stop1, start2, stop2) {
+	return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2
 }

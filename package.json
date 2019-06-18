@@ -7,7 +7,8 @@
 		"@tensorflow/tfjs-node": "^1.1.2",
 		"dat": "^13.13.1",
 		"lodash": "^4.17.11",
-		"phaser": "^3.17.0"
+		"phaser": "^3.17.0",
+		"vis": "^4.21.0"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.4.4",

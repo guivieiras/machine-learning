@@ -58,11 +58,8 @@ function create(this: Phaser.Scene) {
 		if (key.code === 'Semicolon') {
 			startLearning(this, cars)
 		}
-		if (key.code === 'KeyK') {
-			isUserPlaying = true
-			cars.push(new Car(this))
-		}
 		if (key.code === 'KeyA') {
+			isUserPlaying = true
 			cars.push(new Car(this))
 		}
 		if (key.code === 'KeyR') {

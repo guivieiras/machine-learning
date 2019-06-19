@@ -91,7 +91,7 @@ export default class Entity {
 			this.car.upKey = false
 			this.car.downKey = false
 		}
-		this.car.steerRatio = this.gene.outputLayer[2].value
+		this.car.steerRatio = Math.max(Math.min(this.gene.outputLayer[2].value, 1), -1)
 	}
 
 	public fourOut() {

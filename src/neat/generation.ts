@@ -14,12 +14,14 @@ export default class Generation {
 			for (let neuron of this.genes[i].inputLayer) {
 				for (let connection of neuron.connections) {
 					connection.weight += (Math.random() * total) / 10 - weightVariation
+					// connection.weight = connection.weight > 1 ? 1 : connection.weight < -1 ? -1 : connection.weight
 				}
 			}
 
 			for (let neuron of this.genes[i].hiddenLayer) {
 				for (let connection of neuron.connections) {
 					connection.weight += (Math.random() * total) / 10 - weightVariation
+					// connection.weight = connection.weight > 1 ? 1 : connection.weight < -1 ? -1 : connection.weight
 				}
 			}
 		}

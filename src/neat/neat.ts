@@ -135,12 +135,12 @@ export function updateLearning(scene: Scene, cars: Car[]) {
 		// return
 		cars.length = 0
 		let thisGeneration = genome.generations[genome.generations.length - 1]
-		if (lastTopFitness === bestFitness[0].fitness) {
+		if (lastTopFitness <= bestFitness[0].fitness) {
 			weight += 0.1
 		} else {
 			weight = 0.2
 		}
-		lastTopFitness = bestFitness[0].fitness
+		lastTopFitness = Math.max(bestFitness[0].fitness, lastTopFitness)
 		thisGeneration.forwardGeneration(bestFitness[0].entity.gene, bestFitness[1].entity.gene, weight)
 		for (let gene of thisGeneration.genes) {
 			let car = new Car(scene)

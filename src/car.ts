@@ -53,15 +53,13 @@ export default class Car {
 
 	public fitness: number = 0
 	public aliveTicks: number = 0
-	public ticksToDie: number = 150
-	public defaultTicksToDie: number = 150
-
-	public onUpdate: (car: Car) => void
+	public ticksToDie: number = 75
+	public defaultTicksToDie: number = 75
 
 	private lastCheckpoint: Phaser.Geom.Line
 
 	constructor(scene: Phaser.Scene) {
-		this.matterImage = scene.matter.add.image(400, 665, 'car')
+		this.matterImage = scene.matter.add.image(400, 1420, 'car')
 		this.matterImage.setScale(0.3)
 		this.matterImage.setFrictionAir(0.07)
 		this.matterImage.setMass(10)

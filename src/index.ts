@@ -5,8 +5,8 @@ import Track from './track'
 
 let config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
-	width: 1280,
-	height: 720,
+	width: 1500,
+	height: 1500,
 	parent: 'phaser-example',
 	physics: {
 		default: 'matter',
@@ -82,7 +82,7 @@ function create(this: Phaser.Scene) {
 	})
 
 	cursors = this.input.keyboard.createCursorKeys()
-	this.matter.world.setBounds(0, 0, 1280, 720)
+	this.matter.world.setBounds(0, 0, 1500, 1500)
 }
 let isUserPlaying
 function update(this: Phaser.Scene) {

@@ -1,6 +1,5 @@
 import { generateKeyPair } from 'crypto'
 import Car from '../car'
-import Brain from './brain'
 import Connection from './connection'
 import Gene from './gene'
 import Layer from './layer'
@@ -8,16 +7,11 @@ import Neuron from './neuron'
 
 export default class Entity {
 	public gene: Gene
-	public brain: Brain
-
 	public car: Car
-
 	public getInputs: () => number[]
-	public count = 0
 
-	constructor(car: Car, gene: Gene, brain: Brain) {
+	constructor(car: Car, gene: Gene) {
 		this.gene = gene
-		this.brain = brain
 		this.car = car
 	}
 
@@ -49,9 +43,6 @@ export default class Entity {
 			for (let connection of this.gene.hiddenLayer[i].connections) {
 				connection.to.value += connection.weight * this.gene.hiddenLayer[i].value
 			}
-		}
-		if (this.count++ === 1) {
-			// throw new Error('oie')
 		}
 		// for (let i = 0; i < this.gene.outputLayer.length; i++) {
 		// 	this.gene.outputLayer[i].value = sigmoid(this.gene.outputLayer[i].value)

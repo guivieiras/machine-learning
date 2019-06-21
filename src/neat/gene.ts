@@ -1,4 +1,3 @@
-import Brain from './brain'
 import Connection from './connection'
 import Layer from './layer'
 import Neuron from './neuron'

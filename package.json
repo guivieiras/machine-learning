@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "src/index.js",
 	"dependencies": {
-		"@tensorflow/tfjs-node": "^1.1.2",
+		"@tensorflow/tfjs": "^1.2.1",
 		"dat": "^13.13.1",
 		"lodash": "^4.17.11",
 		"phaser": "^3.17.0",

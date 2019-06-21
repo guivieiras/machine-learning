@@ -1,7 +1,6 @@
 import { Scene } from 'phaser'
 import vis from 'vis'
 import Car from '../car'
-import Brain from './brain'
 import Entity from './entity'
 import Gene from './gene'
 import Generation from './generation'
@@ -67,9 +66,8 @@ export function startLearning(scene: Phaser.Scene, cars: Car[]) {
 
 	for (let gene of genes) {
 		let car = new Car(scene)
-		let brain = new Brain()
 
-		let entity = new Entity(car, gene, brain)
+		let entity = new Entity(car, gene)
 		car.entity = entity
 		cars.push(car)
 	}
@@ -144,9 +142,8 @@ export function updateLearning(scene: Scene, cars: Car[]) {
 		thisGeneration.forwardGeneration(bestFitness[0].entity.gene, bestFitness[1].entity.gene, weight)
 		for (let gene of thisGeneration.genes) {
 			let car = new Car(scene)
-			let brain = new Brain()
 
-			let entity = new Entity(car, gene, brain)
+			let entity = new Entity(car, gene)
 			car.entity = entity
 
 			cars.push(car)

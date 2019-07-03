@@ -125,6 +125,6 @@ function sigmoid(t) {
 	return 1 / (1 + Math.pow(Math.E, -t))
 }
 
-function remap(n, start1, stop1, start2, stop2) {
+export function remap(n, start1, stop1, start2, stop2) {
 	return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2
 }

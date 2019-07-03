@@ -27,9 +27,9 @@ export default class Generation {
 		}
 	}
 
-	public createGenes(quantity: number) {
+	public createGenes(quantity: number, inputSize: number) {
 		for (let i = 0; i < quantity; i++) {
-			this.genes.push(new Gene(6))
+			this.genes.push(new Gene(inputSize))
 		}
 		return this.genes
 	}

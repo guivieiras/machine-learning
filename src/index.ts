@@ -1,6 +1,6 @@
 import Phaser, { Curves } from 'phaser'
 import Car from './car'
-import { startLearning, updateLearning } from './neat/neat'
+import Neat from './neat/neat'
 import Track from './track'
 
 let config: Phaser.Types.Core.GameConfig = {
@@ -35,6 +35,7 @@ function preload(this: Phaser.Scene) {
 let cars: Car[] = []
 let track: Track
 let cursors: Phaser.Types.Input.Keyboard.CursorKeys
+let neat: Neat = new Neat()
 
 function create(this: Phaser.Scene) {
 	// this.add.tileSprite(640, 360, 1280, 720, 'soil')
@@ -56,7 +57,7 @@ function create(this: Phaser.Scene) {
 	document.addEventListener('keyup', key => {
 		console.log(key.code)
 		if (key.code === 'Semicolon') {
-			startLearning(this, cars)
+			neat.startLearning(this, cars)
 		}
 		if (key.code === 'KeyA') {
 			isUserPlaying = true
@@ -64,6 +65,13 @@ function create(this: Phaser.Scene) {
 		}
 		if (key.code === 'KeyR') {
 			Car.forward = !Car.forward
+		}
+		if (key.code === 'KeyP'){
+			cars.forEach(x=> x.kill())
+			neat.pauseUnpause(true)
+		}
+		if (key.code === 'KeyU'){
+			neat.pauseUnpause(false)
 		}
 		if (key.code === 'KeyS') {
 			localStorage.leftLines = JSON.stringify(track.leftLines)
@@ -97,6 +105,6 @@ function update(this: Phaser.Scene) {
 		car.update(track.trackLines, track.checkpoints)
 	}
 	if (!isUserPlaying) {
-		updateLearning(this, cars)
+		neat.updateLearning(this, cars)
 	}
 }

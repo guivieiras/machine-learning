@@ -3,10 +3,15 @@ import Car from './car'
 import Neat from './neat/neat'
 import Track from './track'
 
+let trackSize = {
+	width: window.innerWidth,
+	height: window.innerHeight
+}
+
 let config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
-	width: 1500,
-	height: 1500,
+	width: trackSize.width,
+	height: trackSize.height,
 	parent: 'phaser-example',
 	physics: {
 		default: 'matter',
@@ -65,12 +70,14 @@ function create(this: Phaser.Scene) {
 		}
 		if (key.code === 'KeyR') {
 			Car.forward = !Car.forward
+			neat.weight = 0.2
+			neat.lastTopFitness = 0
 		}
-		if (key.code === 'KeyP'){
-			cars.forEach(x=> x.kill())
+		if (key.code === 'KeyP') {
+			cars.forEach(x => x.kill())
 			neat.pauseUnpause(true)
 		}
-		if (key.code === 'KeyU'){
+		if (key.code === 'KeyU') {
 			neat.pauseUnpause(false)
 		}
 		if (key.code === 'KeyS') {
@@ -90,10 +97,16 @@ function create(this: Phaser.Scene) {
 	})
 
 	cursors = this.input.keyboard.createCursorKeys()
-	this.matter.world.setBounds(0, 0, 1500, 1500)
+	this.matter.world.setBounds(0, 0, trackSize.width, trackSize.height)
 }
 let isUserPlaying
+let g: Phaser.GameObjects.Graphics
 function update(this: Phaser.Scene) {
+	if (!g) { g = this.add.graphics() }
+
+	g.fillStyle(0xff0000)
+	g.fillPoint(Car.carSpawn.x, Car.carSpawn.y, 10)
+
 	track.update()
 	for (let car of cars.filter(x => x.alive)) {
 		if (isUserPlaying) {

@@ -1,11 +1,6 @@
-import Entity, {remap} from './neat/entity'
+import Entity, { remap } from './neat/entity'
 
 export default class Car {
-
-	public visions: Phaser.Geom.Line[] = []
-	public visionsLenght: number = 15
-	public static forward: boolean = true
-
 	get sides(): Phaser.Geom.Line[] {
 		let leftSide = new Phaser.Geom.Line(
 			this.matterImage.getTopLeft().x,
@@ -34,6 +29,13 @@ export default class Car {
 
 		return [leftSide, frontSide, downSide, backSide]
 	}
+	public static visionsLenght: number = 9
+	public static forward: boolean = true
+	public static carSpawn = {
+		x: 250,
+		y: 90
+	}
+	public visions: Phaser.Geom.Line[] = []
 	public matterImage: Phaser.Physics.Matter.Image
 	public graphics: Phaser.GameObjects.Graphics
 
@@ -53,28 +55,27 @@ export default class Car {
 	private lastCheckpoint: Phaser.Geom.Line
 
 	constructor(scene: Phaser.Scene) {
-		this.matterImage = scene.matter.add.image(400, 1420, 'car')
+		this.matterImage = scene.matter.add.image(Car.carSpawn.x, Car.carSpawn.y, 'car')
 		this.matterImage.setScale(0.3)
 		this.matterImage.setFrictionAir(0.07)
 		this.matterImage.setMass(10)
 		this.matterImage.setCollisionGroup(-1)
-		this.matterImage.setRotation(!Car.forward ? 0 : Math.PI)
+		this.matterImage.setRotation(Car.forward ? 0 : Math.PI)
 
-		this.graphics = scene.add.graphics({ lineStyle: { width: 2, color: 0xffffff } })
+		this.graphics = scene.add.graphics({
+			lineStyle: { width: 2, color: 0xffffff }
+		})
 
-		for (let i = 0; i< this.visionsLenght; i++){
+		for (let i = 0; i < Car.visionsLenght; i++) {
 			this.visions.push(new Phaser.Geom.Line(0, 0, 0, 0))
 		}
 	}
 
 	public getInputs(): number[] {
-		return [
-			...this.visions.map(x=> Phaser.Geom.Line.Length(x)),
-			this.matterImage.body.speed
-		]
+		return [...this.visions.map(x => Phaser.Geom.Line.Length(x)), this.matterImage.body.speed]
 	}
 
-	public modifyVisionLines(){
+	public modifyVisionLines() {
 		let point1 = this.matterImage.getTopRight()
 		let point2 = this.matterImage.getBottomRight()
 
@@ -84,19 +85,18 @@ export default class Car {
 		let middleX = Math.cos(angle(this.matterImage.angle, 90)) * (this.matterImage.displayHeight / 2) + point1.x
 		let middleY = Math.sin(angle(this.matterImage.angle, 90)) * (this.matterImage.displayHeight / 2) + point1.y
 
-
-		for (let i = 0; i< this.visionsLenght;i++){
-			let anglex = remap(i, 0, this.visionsLenght - 1, -90, 90)
-			let h = remap(i, 0, this.visionsLenght -1, 0, this.matterImage.displayHeight)
+		for (let i = 0; i < Car.visionsLenght; i++) {
+			let anglex = remap(i, 0, Car.visionsLenght - 1, -90, 90)
+			let h = remap(i, 0, Car.visionsLenght - 1, 0, this.matterImage.displayHeight)
 
 			let x = Math.cos(angle(this.matterImage.angle, 90)) * h + point1.x
 			let y = Math.sin(angle(this.matterImage.angle, 90)) * h + point1.y
 
 			this.visions[i].setTo(
-				x, 
+				x,
 				y,
 				Math.cos(angle(this.matterImage.angle, anglex)) * visionSize + x,
-				Math.sin(angle(this.matterImage.angle, anglex)) * visionSize + y 
+				Math.sin(angle(this.matterImage.angle, anglex)) * visionSize + y
 			)
 		}
 	}
@@ -116,48 +116,6 @@ export default class Car {
 		let middleX = Math.cos(angle(this.matterImage.angle, 90)) * (this.matterImage.displayHeight / 2) + point1.x
 		let middleY = Math.sin(angle(this.matterImage.angle, 90)) * (this.matterImage.displayHeight / 2) + point1.y
 
-		// this.visionLine1.setTo(
-		// 	point1.x,
-		// 	point1.y,
-		// 	Math.cos(angle(this.matterImage.angle, -90)) * visionSize + point1.x,
-		// 	Math.sin(angle(this.matterImage.angle, -90)) * visionSize + point1.y
-		// )
-		// this.visionLine2.setTo(
-		// 	point1.x,
-		// 	point1.y,
-		// 	Math.cos(angle(this.matterImage.angle, -60)) * visionSize + point1.x,
-		// 	Math.sin(angle(this.matterImage.angle, -60)) * visionSize + point1.y
-		// )
-		// this.visionLine3.setTo(
-		// 	point1.x,
-		// 	point1.y,
-		// 	Math.cos(angle(this.matterImage.angle, -30)) * visionSize + point1.x,
-		// 	Math.sin(angle(this.matterImage.angle, -30)) * visionSize + point1.y
-		// )
-		// this.visionLine4.setTo(
-		// 	middleX,
-		// 	middleY,
-		// 	Math.cos(this.matterImage.body.angle) * visionSize + middleX,
-		// 	Math.sin(this.matterImage.body.angle) * visionSize + middleY
-		// )
-		// this.visionLine5.setTo(
-		// 	point2.x,
-		// 	point2.y,
-		// 	Math.cos(angle(this.matterImage.angle, 30)) * visionSize + point2.x,
-		// 	Math.sin(angle(this.matterImage.angle, 30)) * visionSize + point2.y
-		// )
-		// this.visionLine6.setTo(
-		// 	point2.x,
-		// 	point2.y,
-		// 	Math.cos(angle(this.matterImage.angle, 60)) * visionSize + point2.x,
-		// 	Math.sin(angle(this.matterImage.angle, 60)) * visionSize + point2.y
-		// )
-		// this.visionLine7.setTo(
-		// 	point2.x,
-		// 	point2.y,
-		// 	Math.cos(angle(this.matterImage.angle, 90)) * visionSize + point2.x,
-		// 	Math.sin(angle(this.matterImage.angle, 90)) * visionSize + point2.y
-		// )
 		let bounds = this.matterImage.getBounds()
 		for (let checkpoint of checkpoints) {
 			if (Phaser.Geom.Intersects.LineToRectangle(checkpoint, bounds)) {

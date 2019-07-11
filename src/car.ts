@@ -76,21 +76,16 @@ export default class Car {
 	}
 
 	public modifyVisionLines() {
-		let point1 = this.matterImage.getTopRight()
-		let point2 = this.matterImage.getBottomRight()
-
+		let topRight = this.matterImage.getTopRight()
 		this.graphics.clear()
-
 		let visionSize = 500
-		let middleX = Math.cos(angle(this.matterImage.angle, 90)) * (this.matterImage.displayHeight / 2) + point1.x
-		let middleY = Math.sin(angle(this.matterImage.angle, 90)) * (this.matterImage.displayHeight / 2) + point1.y
 
 		for (let i = 0; i < Car.visionsLenght; i++) {
 			let anglex = remap(i, 0, Car.visionsLenght - 1, -90, 90)
 			let h = remap(i, 0, Car.visionsLenght - 1, 0, this.matterImage.displayHeight)
 
-			let x = Math.cos(angle(this.matterImage.angle, 90)) * h + point1.x
-			let y = Math.sin(angle(this.matterImage.angle, 90)) * h + point1.y
+			let x = Math.cos(angle(this.matterImage.angle, 90)) * h + topRight.x
+			let y = Math.sin(angle(this.matterImage.angle, 90)) * h + topRight.y
 
 			this.visions[i].setTo(
 				x,
@@ -106,15 +101,9 @@ export default class Car {
 			this.entity.update(this)
 		}
 
-		let point1 = this.matterImage.getTopRight()
-		let point2 = this.matterImage.getBottomRight()
-
 		this.graphics.clear()
 
 		this.modifyVisionLines()
-		let visionSize = 500
-		let middleX = Math.cos(angle(this.matterImage.angle, 90)) * (this.matterImage.displayHeight / 2) + point1.x
-		let middleY = Math.sin(angle(this.matterImage.angle, 90)) * (this.matterImage.displayHeight / 2) + point1.y
 
 		let bounds = this.matterImage.getBounds()
 		for (let checkpoint of checkpoints) {

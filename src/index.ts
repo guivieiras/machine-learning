@@ -2,6 +2,7 @@ import Phaser, { Curves } from 'phaser'
 import Car from './car'
 import Neat from './neat/neat'
 import Track from './track'
+import Generation from './neat/generation';
 
 let trackSize = {
 	width: window.innerWidth,
@@ -58,6 +59,24 @@ function create(this: Phaser.Scene) {
 			track.checkpoints.push(new Phaser.Geom.Line(line.x1, line.y1, line.x2, line.y2))
 		}
 	}
+
+	let mutationIncrease = document.getElementById('mutationIncrease') as HTMLInputElement
+	let initialMutation = document.getElementById('initialMutation') as HTMLInputElement
+	let actualMutation = document.getElementById('actualMutation') as HTMLInputElement
+	let visions = document.getElementById('visions') as HTMLInputElement
+	let elitism = document.getElementById('elitism') as HTMLInputElement
+
+	mutationIncrease.value = Neat.mutationIncrease.toString()
+	initialMutation.value = Neat.initialMutation.toString()
+	actualMutation.value = neat.actualMutation.toString()
+	visions.value = Car.visionsLenght.toString()
+	elitism.value = Generation.elitism.toString()
+	document.getElementById('update').addEventListener('click', function () {
+		Neat.mutationIncrease = Number.parseInt(mutationIncrease.value)
+		Neat.initialMutation = Number.parseInt(initialMutation.value)
+		Car.visionsLenght = Number.parseInt(visions.value)
+		Generation.elitism = Number.parseInt(elitism.value)
+	})
 
 	document.addEventListener('keyup', key => {
 		console.log(key.code)

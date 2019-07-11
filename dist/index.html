@@ -1,28 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-		<link
-			href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.css"
-			rel="stylesheet"
-			type="text/css"
-		/>
 
-		<title>Document</title>
-	</head>
-	<body>
-		<div id="phaser-example"></div>
-		<div id="info">
-			<!-- <code style="white-space: pre-wrap" id="info">info</code> -->
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.css" rel="stylesheet" type="text/css" />
+
+	<title>Document</title>
+</head>
+
+<body>
+	<div id="phaser-example"></div>
+	<div>
+		<div>
+			<label for="mutationIncrease">Mutation increase</label>
+			<input id="mutationIncrease">
 		</div>
-		<script src="main.js"></script>
+		<div>
+			<label for="initialMutation">Initial mutation</label>
+			<input id="initialMutation">
+		</div>
+		<div>
+			<label for="actualMutation">Actual mutation</label>
+			<input disabled id="actualMutation">
+		</div>
+		<div>
+			<label for="visions">Visions</label>
+			<input id="visions">
+		</div>
+		<div>
+			<label for="elitism">Elitism</label>
+			<input id="elitism">
+		</div>
+		<button id="update">Update</button>
+	</div>
+	<div id="info">
+		<!-- <code style="white-space: pre-wrap" id="info">info</code> -->
+	</div>
+	<script src="main.js"></script>
 
-		<style>
-			body {
-				margin: 0;
-			}
-		</style>
-	</body>
+	<style>
+		body {
+			margin: 0;
+		}
+	</style>
+</body>
+
 </html>

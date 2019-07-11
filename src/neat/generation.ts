@@ -5,12 +5,17 @@ import Gene from './gene'
 export default class Generation {
 	public genes: Gene[] = []
 
-	public forwardGeneration(best: Gene, second: Gene, weightVariation: number = 0.2) {
+	public static elitism: number = 2;
+
+	public forwardGeneration(bestGenes: Gene[], weightVariation: number = 0.2) {
 		let total = weightVariation * 20
-		this.genes[0] = best
-		this.genes[1] = second
-		for (let i = 2; i < this.genes.length; i++) {
-			this.genes[i] = i < this.genes.length / 2 ? best.clone() : second.clone()
+
+		for (let i = 0; i < Generation.elitism; i++) {
+			this.genes[i] = bestGenes[i]
+		}
+
+		for (let i = Generation.elitism; i < this.genes.length; i++) {
+			this.genes[i] = this.genes[i % Generation.elitism].clone()
 			for (let neuron of this.genes[i].inputLayer) {
 				for (let connection of neuron.connections) {
 					connection.weight += (Math.random() * total) / 10 - weightVariation

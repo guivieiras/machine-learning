@@ -7,7 +7,9 @@ import Generation from './generation'
 import Genome from './genome'
 
 export default class Neat {
-	public populationSize: number = 100
+	public static populationSize: number = 200
+	public static initialMutation: number = 0.2
+	public static mutationIncrease: number = 0.1
 
 	public genome = new Genome()
 
@@ -17,7 +19,7 @@ export default class Neat {
 	public shoudUpdate = true
 
 	public lastTopFitness = 0
-	public weight = 0.2
+	public actualMutation = 0.2
 	public paused = false
 
 	constructor() {
@@ -49,7 +51,7 @@ export default class Neat {
 					smooth: {
 						type: 'cubicBezier',
 						forceDirection: 'none',
-						roundness: 0.6
+						roundness: .33
 					}
 				},
 				physics: false,
@@ -71,7 +73,7 @@ export default class Neat {
 
 	public startLearning(scene: Phaser.Scene, cars: Car[]) {
 		let generation: Generation = this.genome.createGeneration()
-		let genes: Gene[] = generation.createGenes(this.populationSize, Car.visionsLenght + 1)
+		let genes: Gene[] = generation.createGenes(Neat.populationSize, Car.visionsLenght + 1)
 
 		for (let gene of genes) {
 			let car = new Car(scene)
@@ -145,7 +147,7 @@ export default class Neat {
 				})
 			}
 
-			setTimeout(() => (this.shoudUpdate = true), 1000)
+			setTimeout(() => (this.shoudUpdate = true), 10000)
 		}
 	}
 	public pauseUnpause(b) {
@@ -159,18 +161,18 @@ export default class Neat {
 				.sort((a, b) => {
 					return b.fitness - a.fitness
 				})
-				.slice(0, 2)
+				.slice()
 
 			// return
 			cars.length = 0
 			let thisGeneration = this.genome.generations[this.genome.generations.length - 1]
 			if (this.lastTopFitness >= bestFitness[0].fitness) {
-				this.weight += 0.1
+				this.actualMutation += Neat.mutationIncrease
 			} else {
-				this.weight = 0.2
+				this.actualMutation = Neat.initialMutation
 			}
 			this.lastTopFitness = Math.max(bestFitness[0].fitness, this.lastTopFitness)
-			thisGeneration.forwardGeneration(bestFitness[0].entity.gene, bestFitness[1].entity.gene, this.weight)
+			thisGeneration.forwardGeneration(bestFitness.map(x => x.entity.gene), this.actualMutation)
 			for (let gene of thisGeneration.genes) {
 				let car = new Car(scene)
 

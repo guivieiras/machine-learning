@@ -31,7 +31,7 @@ export default class Neat {
 				edges: this.dsEdges
 			}
 			let width = 900
-			let height = 600
+			let height = 620
 			let options = {
 				width: width + 'px',
 				height: height + 'px',

@@ -89,7 +89,7 @@ function create(this: Phaser.Scene) {
 		}
 		if (key.code === 'KeyR') {
 			Car.forward = !Car.forward
-			neat.weight = 0.2
+			neat.actualMutation = 0.2
 			neat.lastTopFitness = 0
 		}
 		if (key.code === 'KeyP') {

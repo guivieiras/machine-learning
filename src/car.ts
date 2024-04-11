@@ -39,6 +39,11 @@ export default class Car {
 	public matterImage: Phaser.Physics.Matter.Image
 	public graphics: Phaser.GameObjects.Graphics
 
+	get body(): Phaser.Physics.Arcade.Body | MatterJS.BodyType {
+		if ('speed' in this.matterImage.body) return this.matterImage.body
+		throw new Error('Not implemented')
+	}
+
 	public alive: boolean = true
 	public leftKey: boolean = false
 	public rightKey: boolean = false
@@ -72,7 +77,7 @@ export default class Car {
 	}
 
 	public getInputs(): number[] {
-		return [...this.visions.map(x => Phaser.Geom.Line.Length(x)), this.matterImage.body.speed]
+		return [...this.visions.map(x => Phaser.Geom.Line.Length(x)), this.body.speed]
 	}
 
 	public modifyVisionLines() {
@@ -147,7 +152,7 @@ export default class Car {
 
 		// let angle = { x: speed * Math.cos(car.angle), y: speed * Math.sin(car.body.angle) }
 
-		let angleTurn = this.matterImage.body.speed > 0.1 ? this.matterImage.body.speed * 0.55 : 0
+		let angleTurn = this.body.speed > 0.1 ? this.body.speed * 0.55 : 0
 
 		if (this.steerRatio !== undefined) {
 			this.matterImage.angle += angleTurn * this.steerRatio

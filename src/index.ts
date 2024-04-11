@@ -78,6 +78,7 @@ function create(this: Phaser.Scene) {
 		Generation.elitism = Number.parseInt(elitism.value)
 	})
 
+	console.log('Press Semicolon to start learning')
 	document.addEventListener('keyup', key => {
 		console.log(key.code)
 		if (key.code === 'Semicolon') {

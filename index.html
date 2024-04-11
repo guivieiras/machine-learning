@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css">
+    <title>Phaser - Template</title>
+</head>
+
+<body>
+	<div id="phaser-example"></div>
+	<div>
+		<div>
+			<label for="mutationIncrease">Mutation increase</label>
+			<input id="mutationIncrease">
+		</div>
+		<div>
+			<label for="initialMutation">Initial mutation</label>
+			<input id="initialMutation">
+		</div>
+		<div>
+			<label for="actualMutation">Actual mutation</label>
+			<input disabled id="actualMutation">
+		</div>
+		<div>
+			<label for="visions">Visions</label>
+			<input id="visions">
+		</div>
+		<div>
+			<label for="elitism">Elitism</label>
+			<input id="elitism">
+		</div>
+		<button id="update">Update</button>
+	</div>
+	<div id="info">
+		<!-- <code style="white-space: pre-wrap" id="info">info</code> -->
+	</div>
+
+	<style>
+		body {
+			margin: 0;
+		}
+	</style>
+
+    <div id="app">
+        <div id="game-container"></div>
+    </div>
+    <script type="module" src="/src/index.ts"></script>
+</body>
+</html>
